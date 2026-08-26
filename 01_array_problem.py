@@ -108,7 +108,84 @@ class Solution:
             ans.append(candidate2)
         return ans
 
+    def get_min_diff(self, arr, k):
+        n = len(arr)
+        if n <= 1:
+            return 0
+        arr.sort()
+        ans = arr[-1] - arr[0]
+        for i in range (1, n):
+            if arr[i] - k < 0:
+                continue
+            small = min(arr[0]+k, arr[i]-k)
+            big = max(arr[-1]-k, arr[i-1]+k)
 
+            ans = min(ans, big-small)
+        return ans
+
+    def kadane_algo(self, arr):
+        max_so_far = float('-inf')
+        curr_max = 0
+        start = end = 0
+
+        for i in range (len(arr)):
+            curr_max += arr[i]
+
+            if curr_max > max_so_far:
+                max_so_far = curr_max
+                end = i
+            if curr_max < 0:
+                curr_max = 0
+                start = i+1
+        return arr[start:end+1]
+
+    def max_product(self, arr):
+        n = len(arr)
+        result = float('-inf')
+        pre = suff = 1
+        for i in range(n):
+            if pre == 0:
+                pre = 1
+            pre *= arr[i]
+
+            if suff == 0:
+                suff = 1
+            suff *= arr[n-1-i]
+
+            result = max(result, max(pre, suff))
+        return result
+
+    def max_circular_sub(self, arr):
+        total = sum(arr)
+
+        curr_max = max_so_far = arr[0]
+        curr_min = min_so_far = arr[0]
+
+        for i in range (len(arr)):
+            curr_max = max(curr_max, curr_max+arr[i])
+            max_so_far = max(max_so_far, curr_max)
+
+            curr_min = min(curr_min, curr_min+arr[i])
+            min_so_far = min(min_so_far, curr_min)
+
+        if max_so_far < 0:
+            return max_so_far
+        circular_sum = total-min_so_far
+        return max(max_so_far, circular_sum)
+
+    def missing_number(self, arr):
+        n = len(arr)
+        for i in range (n):
+            while 1 <= arr[i] <= n:
+                correct = arr[i]-1
+                if arr[i] == arr[correct]:
+                    break
+                arr[i], arr[correct] = arr[correct], arr[i]
+        for i in range (n):
+            if arr[i] != i + 1:
+                return i+1
+        return n+1
+     
 if __name__ == "__main__":
     n = int(input("Enter the length of the array: "))
     arr = list(map(int, input().split()))
@@ -138,3 +215,19 @@ if __name__ == "__main__":
 
     # Majority element(n/3)
     # print(sol.majority_element(arr))
+
+    # Get the minimum height of the tower
+    # k = int(input("Enter the value of k: "))
+    # print(sol.get_min_diff(arr, k))
+
+    # Kadane's Algorithm
+    # print(sol.kadane_algo(arr))
+
+    # Maximum products subbarray
+    # print(sol.max_product(arr))
+
+    #  Maximum circular subarray
+    # print(sol.max_circular_sum(arr))
+
+    # find the missing integer
+    # print(sol.missing_number(arr))
