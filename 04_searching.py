@@ -100,6 +100,43 @@ class Solution:
             else:
                 high = mid - 1
 
+    # median of two sorted array
+    def median(self, arr1, arr2):
+        n1, n2 = len(arr1), len(arr2)
+
+        if n1 > n2:
+            return self.median(arr2, arr1)
+        n = n1 + n2
+        left = (n + 1) // 2
+        low, high = 0, n1
+
+        while low <= high:
+            mid1 = (low + high) >> 1
+            mid2 = left - mid1
+            l1 = l2 = float('-inf')
+            r1 = r2 = float('inf')
+
+            if (mid1 - 1) >= 0:
+                l1 = arr1[mid1 - 1]
+            if(mid2 - 1) >= 0:
+                l2 = arr2[mid2 - 1]
+            if mid1 < n1:
+                r1 = arr1[mid1]
+            if mid2 < n2:
+                r2 = arr2[mid2]
+
+            if l1 <= r2 and l2 <= r1:
+                if n % 2 == 1:
+                    return max(l1, l2)
+                else:
+                    return (max(l1, l2) + min(r1, r2)) / 2
+            elif r1 < l2:
+                low = mid1 + 1
+            else:
+                high = mid1 - 1
+        return 0
+
+    
     # k-th element of two sorted array
     def kth_element(self, a, b, k):
         n, m = len(a), len(b)
@@ -169,7 +206,55 @@ class Solution:
                 high = mid - 1
         return ans
 
+    # Page allocation
+    def no_of_student(self, pages, max_page):
+        stu = 1
+        page_per_stu = 0
 
+        for page in pages:
+            if page_per_stu + page > max_page:
+                stu += 1
+                page_per_stu = page
+            else:
+                page_per_stu += page
+        return stu 
+    def page_allocation(self, pages, student):
+        if len(pages) < student:
+            return -1
+        low = max(pages)
+        high = sum(pages)
+
+        while low <= high:
+            mid = (low + high) // 2
+
+            if self.no_of_student(pages, mid) > student:
+                low = mid + 1
+            else:
+                high = mid - 1
+        return low
+
+    def kth_missing(self, arr, k):
+        n = len(arr)
+        left, right = 0, len(arr)-1
+        while left <= right:
+            mid = (left + right) // 2
+            missing = arr[mid] - (mid + 1)
+
+            if missing < k:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return left + k
+
+        # idx = -1
+        # for i in range (len(arr)):
+        #     missing = arr[i]-(i+1)
+        #     if missing < k:
+        #         idx = i
+        #     else:
+        #         break
+        # return idx + k
+        
 if __name__=="__main__":
     print("Input Array:")
     arr = list(map(int, input().split()))
@@ -189,6 +274,11 @@ if __name__=="__main__":
     # find the peak element
     # print(sol.peak_element(arr))
 
+    # median of two sorted arrays
+    # print("Another Array:")
+    # arr2 = list(map(int, input().split()))
+    # print(sol.median(arr, arr2))
+
     # k-th element of the two sorted
     # print("Another Array:")
     # arr2 = list(map(int, input().split()))
@@ -198,3 +288,11 @@ if __name__=="__main__":
     # Aggressive cows
     # cows = int(input("No of cows: "))
     # print(sol.aggressive_cows(arr, cows))
+
+    # Page allocation
+    # student = int(input("No of students: "))
+    # print(sol.page_allocation(arr, student))
+
+    # kth missing number
+    k = int(input("Value of k: "))
+    print(sol.kth_missing(arr, k))
