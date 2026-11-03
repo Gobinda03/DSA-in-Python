@@ -25,6 +25,25 @@ class Solution:
                 
             freq[num] = freq.get(num, 0) + 1
         return cnt
+    
+    # Intersection of Two arrays with Duplicate Elements
+    def intersect(self, arr1, arr2):
+        s = set(arr1)
+        ans = []
+
+        for num in arr2:
+            if num in s:
+                ans.append(num)
+                s.pop()
+        return ans
+    
+    # Union of Arrays with Duplicates
+    def union(self, arr1, arr2):
+        s = set(arr1)
+        for num in arr2:
+            if num not in s:
+                s.add(num)
+        return s
 
 
 if __name__ == "__main__":
@@ -37,5 +56,13 @@ if __name__ == "__main__":
     # print(sol.twoSum(arr, target))
 
     # Count Pairs with Sum
-    target = int(input("Target: "))
-    print(sol.countPairs(arr, target))
+    # target = int(input("Target: "))
+    # print(sol.countPairs(arr, target))
+
+    # Intersection of Two arrays with Duplicate Elements
+    # arr2 = list(map(int, input().split()))
+    # print(sol.intersect(arr, arr2))
+
+    # Union of Arrays with Duplicates
+    # arr2 = list(map(int, input().split()))
+    # print(sol.union(arr, arr2))
